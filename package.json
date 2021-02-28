@@ -1,0 +1,21 @@
+{
+  "name": "mqtt-tempt",
+  "version": "1.0.0",
+  "description": "demo mqtt protocol",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "MaiDX",
+  "license": "ISC",
+  "dependencies": {
+    "aedes": "^0.44.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mqtt": "^4.2.6",
+    "mysql": "^2.18.1",
+    "node-datetime": "^2.1.2",
+    "sequelize": "^6.5.0"
+  }
+}
