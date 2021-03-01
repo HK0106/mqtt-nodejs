@@ -3,35 +3,51 @@ const client = mqtt.connect('mqtt://localhost:1997');
 
 client.on('connect', () => {
     console.log('connected');
-    client.subscribe('temperature')
-    client.publish('temperature',(Math.random() * (0.00 - 100.00) + 100.00).toFixed(2))
-    // setInterval(client.publish('temperature',(Math.random() * (0.00 - 100.00) + 100.00).toFixed(2)),10000);
+    client.subscribe('get/temperature');
 })
 
 client.on('message', (topic, message) => {
-    console.log('=============received %s %s', topic, message);
-
-    // client.publish('temperature',(Math.random() * (0.00 - 100.00) + 100.00).toFixed(2))
+    console.log('[RECEIVED SUCCESS!] Message received = ' + message);
+    if (topic === 'get/temperature' ) {
+        var temperature = (Math.random() * (0.00 - 100.00) + 100.00).toFixed(2);
+        client.publish('temperature', temperature);
+        console.log('Current ' + topic + ' is ' + temperature);
+        log_temp(topic,temperature);
+    }
 })
 
-function handleAppExit (options,err) {
-    if(err) {
-        console.log(err.stack);
-    }
-    if(options.cleanup) {
-        client.publish('connect/status', 'disconnect');
-    }
-    if (options.exit) {
-        process.exit();
-    }
-};
+////////////////////////////////////////////////////////////////////////
+////////////////////////////  MY SQL ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+const mysql = require('mysql');
+const dateTime = require('node-datetime');
 
-process.on('exit', handleAppExit.bind(null, {
-    cleanup: true
-}))
-process.on('SIGINT', handleAppExit.bind(null, {
-    exit: true
-}))
-process.on('uncaughtException', handleAppExit.bind(null, {
-    exit: true
-}))
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '123456789',
+    database: 'mqtttest'
+});
+
+connection.connect(err => {
+    if (err) {
+        throw err;
+    }
+})
+
+function log_temp(topic, message) {
+    var sql = "INSERT INTO ?? (??, ??, ??) VALUES (?, ?, ?)";
+    var dt = dateTime.create();
+    var date = dt.format('Y-m-d H:M:S');
+    var params = ['tbl_record_temperature','datetime','topic', 'temperature', date, topic, message];
+    sql = mysql.format(sql, params);
+    connection.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log("--------1 record insert to SQL----------")
+        console.log("-------- "+ result.toString() +" ----------")
+
+    })
+}
+
+
+

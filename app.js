@@ -38,29 +38,29 @@ function mqtt_close() {
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////  MY SQL ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-
-const mysql = require('mysql');
-const dateTime = require('node-datetime');
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123456789',
-    database: 'mqtttest'
-});
-
-connection.connect(err => {
-    if (err) throw err;
-})
-
-function insert_message(topic, message, packet) {
-    var sql = "INSERT INTO ?? (??,??,??) VALUES (?,?,?)";
-    var dt = dateTime.create();
-    var date = dt.format('Y-m-d H:M:S');
-    var params = ['tbl_record_temperature','datetime','temperature',date, topic, message];
-    sql = mysql.format(sql, params);
-    connection.query(sql, (err, result) => {
-        if (err) throw err;
-        console.log("--------1 record insert to SQL----------")
-    });
-}
+//
+// const mysql = require('mysql');
+// const dateTime = require('node-datetime');
+//
+// const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '123456789',
+//     database: 'mqtttest'
+// });
+//
+// connection.connect(err => {
+//     if (err) throw err;
+// })
+//
+// function insert_message(topic, message, packet) {
+//     var sql = "INSERT INTO ?? (??,??,??) VALUES (?,?,?)";
+//     var dt = dateTime.create();
+//     var date = dt.format('Y-m-d H:M:S');
+//     var params = ['tbl_record_temperature','datetime','temperature',date, topic, message];
+//     sql = mysql.format(sql, params);
+//     connection.query(sql, (err, result) => {
+//         if (err) throw err;
+//         console.log("--------1 record insert to SQL----------")
+//     });
+// }
